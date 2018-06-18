@@ -1,7 +1,7 @@
 # CyberWeek 2018 - Cyber Challenge
 
 There were a total of 9 challenges that must be solved in a consecutive manner  
-![Challenges](files/images/challenges.png)
+![Challenges](files/images/challenges.PNG)
 
 ## Entebbe International Airport
 ### Airport Security
@@ -9,7 +9,7 @@ There were a total of 9 challenges that must be solved in a consecutive manner
 
 
 Open page source and search for 'admin'   
-![Page Source](files/images/1-1.png)  
+![Page Source](files/images/1-1.PNG)  
 Solution is:  http://40.113.226.176/EIAAdminConsole/shell.php
 
 
@@ -18,7 +18,7 @@ Solution is:  http://40.113.226.176/EIAAdminConsole/shell.php
 
 We get access to the admin console which accepts `ls, cat, echo`.  
 So we try `'echo aaaaaaaaaaaaaaaaaaaa'` and get a base64 result:  
-![Admin Console](files/images/1-2.png)  
+![Admin Console](files/images/1-2.PNG)  
 After decoding the base64 and xoring with the input `aaaaaaaaaaaaaaaaaaaa`, we get `3nt3bb30p3r3nt3bb30p`
 ```python
 import base64
@@ -42,7 +42,7 @@ Now that we have the key, we can run *'ls'* which returns 3 files:
 `KQ856_Maintenance.pdf, KQ856_passengers.pdf, shell.php`
 
 we can perform `'cat KQ856_passengers.pdf'`, decipher the output into a file, open it normally ans search for seat C12:
-![Passenger List](files/images/1-3.png)
+![Passenger List](files/images/1-3.PNG)
 Solution is: Danso Sane
 
 You can find the python script [Here](files/ent.py).
@@ -54,10 +54,10 @@ You can find the python script [Here](files/ent.py).
 >Hack into the ABC Capital Bank system at http://40.113.226.89/ and gain access to the Customer Support system. What do you get when gaining access?
 
 Examining the cookies we can see there's an odd one (`isDebugMode=false`):   
-![Cookie](files/images/2-1.png)
+![Cookie](files/images/2-1.PNG)
 
 Changing the value to *'true'* adds a link that wasn't there previously  
-![Cookie](files/images/2-1a.png)
+![Cookie](files/images/2-1a.PNG)
 
 Which leads to http://40.113.226.89/2018-Mar-Jun-Transactions.csv  
 Solution is: 2018-Mar-Jun-Transactions.csv
@@ -83,7 +83,7 @@ Solution is: 20183521797
 
 In Wireshark we go to *File->Export Objects->HTTP* and get a list of objects.
 Looking through them we find several objects with no Hostname/Content Type.  
-![PCAP](files/images/3-1.png)
+![PCAP](files/images/3-1.PNG)
 
 Following the TCP stream, we get a base64 conversation:
 | | Base64  | Plaintext|
@@ -104,7 +104,7 @@ Solution is: 23.99.226.17
 > First see if you can access the CnC server. What is the value passed to the server that lets you in?
 
 Entering the website (http://23.99.226.17/) we're greeted with a minimal login  
-![Login](files/images/4-1.png)
+![Login](files/images/4-1.PNG)
 
 Looking at the source we find an obfuscated js script
 ```javascript
@@ -190,10 +190,10 @@ fail
 Nothing too exciting. Time for IDA.  
 Looking at the `main` function we can distinguish 4 interesting parts:  
 1) First we have the initialization where our input password is saved into v15  
-![RE Init](files/images/5-1.png)  
+![RE Init](files/images/5-1.PNG)  
 
 2) Here we see a double loop that uses the random value `v13` to xor our password  
-![RE Xor](files/images/5-1a.png)  
+![RE Xor](files/images/5-1a.PNG)  
 let's try to simplify with some Python
 ```python
 v12 = 30
@@ -210,7 +210,7 @@ There are 2 important things to notice here:
 - each byte is xored an even amount of times (8*8) with the same value, thus nullyfing the xor.
 
 3) This one is straight forward, substract from each char `(v12 % 4)`. Looking back at `v12`, we can see its value is a constant `38` so we will always substract `2`.  
-![RE Shift](files/images/5-1b.png)  
+![RE Shift](files/images/5-1b.PNG)  
 
 ```python
 for j in range(9):
@@ -218,7 +218,7 @@ for j in range(9):
 ```
 
 4) Eventually we test whether we got `"pj.jf2ai1"` and if so print out the password's md5 value.  
-![RE Test](files/images/5-1c.png)  
+![RE Test](files/images/5-1c.PNG)  
 ```python
 v15 = "".join(v15[:-1])
 if v15 == "pj.jf2ai1":
