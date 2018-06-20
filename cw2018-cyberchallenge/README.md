@@ -41,13 +41,15 @@ Solution is:  '3nt3bb30p3r'
 Now that we have the key, we can run *'ls'* which returns 3 files:
 `KQ856_Maintenance.pdf, KQ856_passengers.pdf, shell.php`
 
-we can perform `'cat KQ856_passengers.pdf'`, decipher the output into a file, open it normally ans search for seat C12:
+we can perform `'cat KQ856_passengers.pdf'`, decipher the output into a file, open it normally and search for seat C12:
 ![Passenger List](files/images/1-3.PNG)
 Solution is: Danso Sane
 
 You can find the python script [Here](files/ent.py).
 
+
 ---
+
 
 ## ABC Capital Bank
 ### Customer Support
@@ -70,7 +72,7 @@ After downloading the file we get a standard csv file with the following format:
 
 ID,Date,Name,, Amount ,Currency,Type,,,
 
-Throwing it in Excel and playing with various parameters, we eventually find a transaction that has the highest transaction amount:  
+Throwing it in Excel and playing with various parameters is the best we had. We eventually found a transaction that has the highest amount:  
 `20183521797,01/04/2018,Sultan,Okereke," 57,250,600 ",UGX,Transfer,,,`
 
 Solution is: 20183521797
@@ -81,20 +83,19 @@ Solution is: 20183521797
 ### Logs Analysis
 >The logs are available at [/media/Evidences/NetworkLogs.pcap](files/NetworkLogs.pcap). Analyze them and find the IP of the ransomware CnC server.
 
-In Wireshark we go to *File->Export Objects->HTTP* and get a list of objects.
+In Wireshark we go to *File->Export Objects->HTTP* and get a list of objects.  
 Looking through them we find several objects with no Hostname/Content Type.  
 ![PCAP](files/images/3-1.PNG)
 
 Following the TCP stream, we get a base64 conversation:
-| | Base64  | Plaintext|
-|:-|:--------|:---------|
+```
 |Client | SEVMTE8=                         |  HELLO  
 |Server | SEVMTE8=                         |  HELLO  
 |Client | R2V0Q05DU2VydmVy                 |  GetCNCServer  
 |Server | Q05DIFNFUlZFUiAyMy45OS4yMjYuMTc= |  CNC SERVER 23.99.226.17  
 |Client | R09PREJZRQ==                     |  GOODBYE  
 |Server | R09PREJZRQ==                     |  GOODBYE  
-
+```
 Solution is: 23.99.226.17
 
 ---
@@ -209,7 +210,7 @@ There are 2 important things to notice here:
 - Each outer iteration performs a xor and rotates the result by 1 byte (including the null byte), 8 times total.
 - each byte is xored an even amount of times (8*8) with the same value, thus nullyfing the xor.
 
-3) This one is straight forward, substract from each char `(v12 % 4)`. Looking back at `v12`, we can see its value is a constant `38` so we will always substract `2`.  
+3) This one is straight forward, subtract from each char `(v12 % 4)`. Looking back at `v12`, we can see its value is a constant `38` so we will always subtract `2`.  
 ![RE Shift](files/images/5-1b.PNG)  
 
 ```python
@@ -236,6 +237,6 @@ l0lh4ck3r
 success
 Decyrption Key Is f2ddd1c9cb75129ac8e69f305e77750e
 ```
-Solution is: l0lh4ck3r
+Solution is: 'f2ddd1c9cb75129ac8e69f305e77750e'
 
 You can find the python script [Here](files/re.py).
